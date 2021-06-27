@@ -10,7 +10,9 @@
         <ul class="flex flex-row mt-1">
           <!-- Navigation Links -->
           <li>
-            <a class="px-2 text-white" href="#">Login / Register</a>
+            <a class="px-2 text-white" href="#" @click.prevent='toggleAuthModal'>
+              Login / Register
+              </a>
           </li>
           <li>
             <a class="px-2 text-white" href="#">Manage</a>
@@ -20,3 +22,21 @@
     </nav>
   </header>
 </template>
+
+<script>
+// Extracts mutation function out of store
+import { mapMutations } from 'vuex';
+
+export default {
+  name: 'AppHeader',
+  methods: {
+    ...mapMutations(['toggleAuthModal']),
+
+    // Below doesn't get the benefit of caching feature from vuex because of this.$store.state
+    // toggleAuthModal() {
+    //   // this.$store.state.authModalShow = !this.$store.state.authModalShow;
+    //   this.$store.commit('toggleAuthModal');
+    // },
+  },
+};
+</script>

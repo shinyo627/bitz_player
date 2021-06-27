@@ -1,6 +1,7 @@
 <template>
   <!-- Auth Modal -->
-  <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="modal">
+  <div class="fixed z-10 inset-0 overflow-y-auto" id="modal"
+  :class='{hidden: !authModalShow}'>
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center
       sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity">
@@ -19,25 +20,37 @@
           <div class="flex justify-between items-center pb-4">
             <p class="text-2xl font-bold">Your Account</p>
             <!-- Modal Close Button -->
-            <div class="modal-close cursor-pointer z-50">
+            <div class="modal-close cursor-pointer z-50" @click.prevent='toggleAuthModal'>
               <i class="fas fa-times"></i>
             </div>
           </div>
 
           <!-- Tabs -->
+          <!-- Pressence of utility classes in line 34 will be determined by
+          truthiness of data tab property -->
           <ul class="flex flex-wrap mb-4">
             <li class="flex-auto text-center">
-              <a class="block rounded py-3 px-4 transition hover:text-white text-white
-                bg-blue-600" href="#">Login</a>
+              <a class="block rounded py-3 px-4 transition"
+              href="#" @click.prevent="tab = 'login'"
+                :class="{
+                  'hover: text-white text-white bg-blue-600' : tab === 'login',
+                  'hover: text-blue-600': tab === 'register'
+                  }"
+                >Login</a>
             </li>
             <li class="flex-auto text-center">
               <a class="block rounded py-3 px-4 transition"
-                href="#">Register</a>
+                href="#" @click.prevent="tab = 'register'"
+                 :class="{
+                  'hover: text-white text-white bg-blue-600' : tab === 'register',
+                  'hover: text-blue-600': tab === 'login'
+                  }"
+                >Register</a>
             </li>
           </ul>
 
           <!-- Login Form -->
-          <form>
+          <form v-show='tab === `login`'>
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
@@ -60,8 +73,9 @@
               Submit
             </button>
           </form>
+
           <!-- Registration Form -->
-          <form>
+          <form v-show='tab === `register`'>
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
@@ -130,7 +144,35 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   name: 'AuthModal',
+  data() {
+    return {
+      tab: 'login',
+    };
+  },
+  methods: {
+    ...mapMutations(['toggleAuthModal']),
+  },
+  computed: {
+    // Option to use MapState to PURELY retrieve store state
+    ...mapState(['authModalShow']),
+
+    // ** Maping functions can do aliasing for each properties of states/getters/mutations
+    // before using them in respective component
+    // ...mapState({
+    //   modal: 'authModalShow',
+    // }),
+
+    // Option to use mapGetters to retrieve store state but this getters function can do computation
+    // ...mapGetters(['authModalShow])
+
+    // Option to directly get sates from store's getters
+    // authModalShow() {
+    //   return this.$store.getters.authModalShow;
+    // },
+  },
 };
 </script>
