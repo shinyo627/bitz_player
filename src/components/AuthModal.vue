@@ -50,29 +50,32 @@
           </ul>
 
           <!-- Login Form -->
-          <form v-show='tab === `login`'>
+          <VeeForm :validation-schema='loginSchema' v-show='tab === `login`'
+          @submit='login'>
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input type="email"
+              <VeeField type="email" name='email'
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Email" />
+                <ErrorMessage class='text-red-600' name='email'/>
             </div>
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <input type="password"
+              <VeeField type="password" name='password'
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Password" />
+                <ErrorMessage class='text-red-600' name='password' />
             </div>
             <button type="submit"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition
                 hover:bg-purple-700">
               Submit
             </button>
-          </form>
+          </VeeForm>
 
           <!--Register alert msg box  -->
           <div class='text-white text-center font-bold p-5 mb-4'
@@ -181,7 +184,7 @@ export default {
         name: 'required|min:3|max:50|alphaSpaces',
         email: 'required|min:3|max:50|email',
         age: 'required|minVal:12|maxVal:100',
-        password: 'required|min:3|max:100',
+        password: 'required|min:3|max:32',
         confirmPassword: 'passwordMismatch:@password',
         country: 'required|countryExcluded:Antarctica',
         tos: 'tos',
@@ -193,6 +196,10 @@ export default {
       registerShowAlert: false,
       registerAlertVariant: 'bg-blue-500',
       registerAlertMsg: 'Please wait! Your account is being created.',
+      loginSchema: {
+        email: 'required|email',
+        password: 'required|min:3|max:32',
+      },
     };
   },
   methods: {
@@ -205,6 +212,9 @@ export default {
 
       this.registerAlertVariant = 'bg-green-500';
       this.registerAlertMsg = 'Success! Your account has been created';
+      console.log(values);
+    },
+    login(values) {
       console.log(values);
     },
   },
