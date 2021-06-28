@@ -131,6 +131,8 @@ export default {
 
       this.registerAlertVariant = 'bg-green-500';
       this.registerAlertMsg = 'Success! Your account has been created';
+
+      window.location.reload();
     },
   },
 };

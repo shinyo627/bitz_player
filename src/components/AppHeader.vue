@@ -9,14 +9,19 @@
         <!-- Primary Navigation -->
         <ul class="flex flex-row mt-1">
           <!-- Navigation Links -->
-          <li>
+          <li v-if="!userLoggedIn">
             <a class="px-2 text-white" href="#" @click.prevent='toggleAuthModal'>
               Login / Register
               </a>
           </li>
+          <template v-else>
           <li>
             <a class="px-2 text-white" href="#">Manage</a>
           </li>
+          <li>
+            <a class="px-2 text-white" href="#" @click.prevent="signOut">Logout</a>
+          </li>
+          </template>
         </ul>
       </div>
     </nav>
@@ -25,17 +30,24 @@
 
 <script>
 // Extracts mutation function out of store
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'AppHeader',
+  computed: {
+    ...mapState(['userLoggedIn']),
+  },
   methods: {
     ...mapMutations(['toggleAuthModal']),
-
     // Below doesn't get the benefit of caching feature from vuex because of this.$store.state
     // toggleAuthModal() {
     //   // this.$store.state.authModalShow = !this.$store.state.authModalShow;
     //   this.$store.commit('toggleAuthModal');
+    // },
+    ...mapActions(['signOut']),
+    // *** Below is same as above line
+    // signOut() {
+    //   this.$store.dispatch('signOut');
     // },
   },
 };
