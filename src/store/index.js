@@ -41,5 +41,12 @@ export default createStore({
       // Context the first parameter inside action gives access to store itself.
       commit('toggleAuth');
     },
+    initLogin({ commit }) {
+      const user = auth.currentUser;
+
+      if (user) {
+        commit('toggleAuth');
+      }
+    },
   },
 });

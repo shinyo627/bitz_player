@@ -3,15 +3,23 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VeeValidatePlugin from './plugins/validation';
-import './firebase/firebase';
+import { auth } from './firebase/firebase';
 
 import './assets/tailwind.css';
 import './assets/main.css';
 
-const app = createApp(App);
+let app;
 
-app.use(store);
-app.use(router);
-app.use(VeeValidatePlugin);
+// Calling Firebase for checking user is authenticated before vue instance
+// invoked.
+auth.onAuthStateChanged(() => {
+  if (!app) {
+    app = createApp(App);
 
-app.mount('#app');
+    app.use(store);
+    app.use(router);
+    app.use(VeeValidatePlugin);
+
+    app.mount('#app');
+  }
+});
